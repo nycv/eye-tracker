@@ -1,0 +1,32 @@
+{
+  "name": "goggles-web",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "wds": "webpack-dev-server --config ./webpack.config.js"
+  },
+  "keywords": [
+    "goggles",
+    "camera"
+  ],
+  "author": "Sean Pollock",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-regenerator": "^7.0.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.9"
+  },
+  "dependencies": {
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "ws": "^6.0.0"
+  }
+}

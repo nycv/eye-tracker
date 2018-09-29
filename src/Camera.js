@@ -1,8 +1,15 @@
 import React, { Component } from 'react'
+import Socket from './Socket'
+
+const socketParams = {
+  host: 'ws://localhost',
+  port: '3050',
+}
 
 export default class Camera extends Component {
   constructor() {
     super()
+    this.socket = new Socket(socketParams)
     this.polyfillMediaCapture()
     this.startCamera()
   }
@@ -30,31 +37,53 @@ export default class Camera extends Component {
         autoPlay='true' />
     </div>
   )
-  
+
   startCamera = () => {
-    navigator.getUserMedia({ video: true, audio: true },
+    navigator.getUserMedia({ video: true, audio: false },
       (stream) => {
-        
+        console.log('stream', stream)
+
         // setup media recorder
-        const options = { mimeType: 'video/webm;codecs=h264' }
-        const mediaRecorder = new MediaRecorder(stream, options)
-        console.log('started media recorder', mediaRecorder)
+        const options = {
+          mimeType: 'video/webm;codecs=h264',
+          videoBitsPerSecond : 3000000
+        }
+
+        this.mediaRecorder = new MediaRecorder(stream, options)
         
+        // create url to view video stream
         this.videoSrc = window.URL.createObjectURL(stream)
         this.setState({ videoSrc: this.videoSrc })
         
-        mediaRecorder.ondataavailable = this.handleData
-
-        mediaRecorder.start()
+        this.mediaRecorder.start(1000) // 1 second chunks
         
-      }, this.handleStreamError)
+        // handle each chunk of data as it comes
+        this.mediaRecorder.ondataavailable = this.handleData
+        
+        // TODO: need better error handlin
+        this.mediaRecorder.onerror = this.handleError
+
+      }, this.handleStreamError) // TODO: handle stream error, gracefully... 
   }
-  
-  
-  handleData = (data) => console.log('data chunk', data)
-  
+
+  handleError = (err) => {
+    console.log('error in media ecorder', err)
+
+    // TODO: stop and retry media recorder...
+    this.mediaRecorder.stop()
+  }
+
+  handleData = (data) => {
+    try {
+      console.log('data', data.data)
+      this.socket.ws.send(data.data)     
+    } catch (err) {
+      console.log('error sending data over ws', err)
+    }
+  }
+
   handleStreamError = (err) => console.log('error in video stream', err)
-  
+
   render = () => {
     console.log('hit render')
     if (!!this.videoSrc) return this.video()

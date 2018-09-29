@@ -5,7 +5,7 @@ import Camera from './Camera'
 export default class Main extends Component {
   render = () => (
     <div style={styles.containerStyle}>
-      <MouseDetector />
+      <MousePad />
       <Camera />
     </div>
   )
@@ -15,6 +15,6 @@ const styles = {
   containerStyle: {
     width: '100%',
     height: '100%',
-    position: 'relative'a
+    position: 'relative'
   }
 }

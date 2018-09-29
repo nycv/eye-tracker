@@ -85,7 +85,6 @@ export default class Camera extends Component {
   handleStreamError = (err) => console.log('error in video stream', err)
 
   render = () => {
-    console.log('hit render')
     if (!!this.videoSrc) return this.video()
     else return null
   }

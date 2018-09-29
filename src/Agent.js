@@ -1,30 +1,42 @@
 
-export default class Agent {
+class Agent {
   constructor(ctx) {
     this.ctx = ctx
     console.log('your name is neo')
   }
-
-  gameLoop = async (frameInterval) => {
-    while (true) {
-      await this.delay(frameInterval)
-      this.move()
-      this.draw()
-    }
+  
+  async gameLoop(frameInterval) {
+    await this.delay(frameInterval)
+    this.move()
+    this.draw()
+    return await this.gameLoop()
   }
   
-  move = (x, y) => {
+  move(x, y) {
     console.log('calculating move...')
   }
 
-  draw = (x, y) => {
+  draw(x, y) {
     console.log('drawing circle on canvas')
   }
+
+  // flat random
+  
+  // gaussian random
+  
   
   // delay utlity function
-  delay = (time) => {
+  delay(time) {
     return new Promise((res, rej) => {
-      setTimeout(resolve(true), time)
+      setTimeout(res(true), time)
     })
   }
 }
+
+const main = () => {
+  console.log('trying to start script...')
+  const agent = new Agent()
+  agent.gameLoop()
+}
+
+main()

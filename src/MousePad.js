@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Agent from './Agent'
 
 export default class MousePad extends Component {
   componentDidMount = () => this.initCanvas()
@@ -12,7 +11,8 @@ export default class MousePad extends Component {
       const mousePos = this.getMousePos(evt)
       this.drawParticle(mousePos.x, mousePos.y)
     })
-    this.agent = new Agent()   
+
+    this.startAgentWorker()
   }
 
   getMousePos = (evt) => {
@@ -29,6 +29,12 @@ export default class MousePad extends Component {
     this.ctx.arc(x, y, 3, 0, Math.PI*2, true)
     this.ctx.closePath()
     this.ctx.fill()
+  }
+
+  startAgentWorker = () => {
+    if (window.Worker) {
+      this.agent = new Worker('./src/Agent.js')
+    }
   }
 
   render = () => <canvas style={styles.mousePadStyle} ref="mouse_pad" width={1800} height={900}></canvas>
